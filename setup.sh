@@ -15,6 +15,7 @@ echo -e "Starting mongodb..."
 sudo service mongod start
 
 echo -e "Installing project 100_duvidas_server dependencies..."
+sudo apt-get intsall npm
 npm install
 
 echo -e "Done\n To begin run: npm start"
