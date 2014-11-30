@@ -23,6 +23,8 @@ var UserSchema = new mongoose.Schema(
     }
 );
 
+UserSchema.index({username: 1, email: 1}, {unique: true});
+
 //Hash user password
 UserSchema.pre('save', function(next) {
     var user = this;
@@ -44,6 +46,13 @@ UserSchema.pre('save', function(next) {
         });
     });
 });
+
+UserSchema.methods.checkChanges = function(cb){
+    var user = this;
+    if(user.isModified('username')) cb(new Error("Can't change user name"));
+    if(user.isModified('email')) cb(new Error("Can't change email"));
+    cb(null);
+};
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
