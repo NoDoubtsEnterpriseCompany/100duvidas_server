@@ -21,12 +21,10 @@ sudo wget http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-d
 sudo unzipt sonar-runner-dist-2.4.zip
 sudo mv sonar-runner-2.4 /usr/local
 
-sudo service sonar start
 sudo service jenkins start
 
 echo -e "Sonar and sonar-runner can be found in /usr/local dir"
 
-echo -e "sonar should be avaible on: localhost:9000"
 echo -e "jenkins should be availne on: localhost:8080"
 
 #to set sonar as a service follow those steps 
