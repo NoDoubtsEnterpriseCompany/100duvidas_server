@@ -16,7 +16,8 @@
     "mongoose": "*",
     "should": "*",
     "monky": "*",
-    "mocha": "*"
+    "mocha": "*",
+    "bcrypt": "*"
   },
   "devDependencies": {
     "should": "^4.3.0"
