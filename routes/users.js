@@ -126,6 +126,45 @@ router.post("/addsubject", function(req, res){
   });
 });
 
+router.post('/login',function(req,res){
+  var username = req.body.login;
+  var password = req.body.password;
+  var result = {};
+  var error = {};
+  console.log(req);
+  console.log("soaijadoisa");
+  console.log(body);
+
+  User.findOne({username:username},function(err,doc){
+
+    if(doc) {
+      doc.comparePassword(password,function(err,match){
+        if(match){
+          res.status(200);
+          res.send(JSON.stringify({"result":result, "error":error}));
+        }else if (err){
+          error.code=err.code;
+          error.message = err.message;
+          res.send(JSON.stringify({"result":result, "error":error}));
+        }else{
+          error.code = ErrorCodes.User.PasswordDontMatch;
+          error.message = "Password doesn't match";
+          res.status(401);
+          return res.send(JSON.stringify({"result": result, "error": error}));
+        }
+      });
+
+      }else{
+      res.status(404);
+      error.code = ErrorCodes.User.NotFound;
+      error.message = "User not found";
+      res.send(JSON.stringify({"result": result, "error": error}));
+    }
+
+  });
+
+});
+
 //Updates users data given a username and a JSON object passed through PUT request
 router.put(/\/updateuser\/(\w+)$/, function(req, res){
   var username = req.params[0];
