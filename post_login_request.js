@@ -23,7 +23,7 @@ req.on('error', function(e) {
 
 //write data to request body
 usuario = {};
-usuario.username = "jeymisson";
+usuario.username = "tiaraju";
 usuario.password = "asdf";
 
 req.write(JSON.stringify({"login":usuario.username,"password":usuario.password}));

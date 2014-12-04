@@ -140,6 +140,7 @@ router.post("/login", function(req,res){
       doc.comparePassword(password,function(err,match){
         if(match){
           res.status(200);
+          result.code=200;
           res.send(JSON.stringify({"result":result, "error":error}));
         }else if (err){
           error.code=err.code;
