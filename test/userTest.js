@@ -1,5 +1,5 @@
 var should = require('should');
-var User = require('../models/usermodel')
+var User = require('../models/usermodel');
 var monky = require('../test/mock').monky;
 
 
@@ -31,18 +31,6 @@ describe('User', function() {
             user.profile.should.have.property('degree');
             user.profile.should.have.property('speciality');
             user.profile.should.have.property('subjects');
-        })
-    })
-})
-
-
-
-// beforeEach(function(done) {
-//var suite = this;
-//monky.create('User', function(err, user) {
-        //if (err) return done(err);
-        //suite.user = user;
-        //done()
-    //}
-//);
-//});
+        });
+    });
+});

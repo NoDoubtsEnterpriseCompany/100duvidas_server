@@ -1,7 +1,8 @@
 var mongoose  = require('mongoose')
     , Monky     = require('monky')
     , monky     = new Monky(mongoose)
-    , User      = require('../models/usermodel');
+    , User      = require('../models/usermodel')
+    , Subject   = require('../models/subjectmodel');
 
 /*
     Gerador de Users, #n <-- eh o index de qts Users foram criados User1, passoword1 sao exemplos
@@ -20,6 +21,11 @@ monky.factory('User',  {
             speciality: 'Donuts',
             subjects: []
         }
+    }
+);
+
+monky.factory('Subject',  {
+        name: 'Subject#n'
     }
 );
 

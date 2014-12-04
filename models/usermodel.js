@@ -1,7 +1,7 @@
 /**
  * Created by jeymisson on 11/29/14.
  */
-var bcrypt = require("bcrypt");
+var bcrypt = require("../bCrypt")
 var mongoose = require('mongoose');
 
 SALT_WORK_FACTOR = 10;
@@ -18,7 +18,7 @@ var UserSchema = new mongoose.Schema(
             gender: Number,
             degree: String,
             speciality: String,
-            subjects: []
+            subjects: [mongoose.Schema.Types.ObjectId]
         }
     }
 );

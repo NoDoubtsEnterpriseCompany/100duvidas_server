@@ -91,6 +91,41 @@ function updateUserData(res, newData, doc) {
   });
 }
 
+/**
+ * Adds a given subject to a user
+ */
+router.post("/addsubject", function(req, res){
+  var username = req.body.username;
+  var subject_id = req.body.subject_id;
+  var error = {};
+  var result = {};
+
+  User.findOne({"username":username}, function(err, doc){
+    if(err){
+      res.status(500);
+      error.code = err.code;
+      error.message = err.message;
+      res.send(JSON.stringify({"result":result, "error":error}));
+    }else if(doc){
+      doc.profile.subjects.push(subject_id);
+      doc.update({profile:{subjects:doc.profile.subjects}},function(err){
+        if(err)
+          res.status(500);
+        else{
+          res.status(201);
+          result.uri = "/users/user/" + username;
+          res.send(JSON.stringify({"result":result, "error":error}));
+        }
+      });
+    }else{
+      res.status(500);
+      error.code = err.code;
+      error.message = err.message;
+      res.send(JSON.stringify({"result":result, "error":error}));
+    }
+  });
+});
+
 //Updates users data given a username and a JSON object passed through PUT request
 router.put(/\/updateuser\/(\w+)$/, function(req, res){
   var username = req.params[0];
