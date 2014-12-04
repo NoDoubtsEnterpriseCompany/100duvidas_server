@@ -25,15 +25,6 @@ req.on('error', function(e) {
 usuario = {};
 usuario.username = "jeymisson";
 usuario.password = "asdf";
-usuario.email = "test@m.com";
-usuario.profile = {};
-usuario.profile.name = "jeymisson";
-usuario.profile.age = 25;
-usuario.profile.profilePic = "url://sfa";
-usuario.profile.gender = 1;
-usuario.profile.degree = "superior incompleto";
-usuario.profile.speciality = "Ciencia da computacao";
-usuario.profile.subjects = [];
 
-req.write(JSON.stringify(usuario.username,usuario.password));
+req.write(JSON.stringify({"login":usuario.username,"password":usuario.password}));
 req.end();

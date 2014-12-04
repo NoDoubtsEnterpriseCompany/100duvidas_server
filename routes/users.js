@@ -126,14 +126,13 @@ router.post("/addsubject", function(req, res){
   });
 });
 
-router.post('/login',function(req,res){
+router.post("/login", function(req,res){
   var username = req.body.login;
   var password = req.body.password;
   var result = {};
   var error = {};
   console.log(req);
   console.log("soaijadoisa");
-  console.log(body);
 
   User.findOne({username:username},function(err,doc){
 
