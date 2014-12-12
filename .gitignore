@@ -1,4 +1,6 @@
 .idea
+.sonar/
+reports/
 node_modules
 *.log
 *.un~
