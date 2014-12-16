@@ -137,8 +137,6 @@ router.post("/login", function(req,res){
   var password = req.body.password;
   var result = {};
   var error = {};
-  console.log(req);
-  console.log("soaijadoisa");
 
   User.findOne({username:username},function(err,doc){
 

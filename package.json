@@ -17,7 +17,8 @@
     "should": "*",
     "monky": "*",
     "mocha": "*",
-    "bcrypt": "*"
+    "bcrypt": "*",
+    "supertest": "*"
   },
   "devDependencies": {
     "should": "^4.3.0"

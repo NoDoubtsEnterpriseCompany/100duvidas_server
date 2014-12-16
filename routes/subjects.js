@@ -9,17 +9,34 @@ var router = express.Router();
 router.get("/", function(req, res){
         var error =  {};
         var result = {};
-    Subject.find(function(err, doc){
-        if(err){
-            res.status(500);
-            error.code = err.code;
-            error.message = err.message;
-        }else{
-            result = doc;
-            res.send(JSON.stringify({"result":result, "error":error}));
-        }
-    });
-
+        var subjectName = req.param('subjectName');
+    if(subjectName == {}){
+        Subject.find(function(err, doc){
+            if(err){
+                res.status(500);
+                error.code = err.code;
+                error.message = err.message;
+            }else{
+                result = doc;
+                res.contentType('application/json');
+                res.send(JSON.stringify({"result":result, "error":error}));
+            }
+        });
+    } else {
+        Subject.findOne(subjectName, function(err, doc){
+            if(err){
+                res.status(500);
+                error.code = err.code;
+                error.message = err.message;
+            }else{
+                result = doc;
+                res.contentType('application/json');
+                res.send(JSON.stringify({"result":result, "error":error}));
+            }
+        });
+    }
 });
+
+
 
 module.exports = router;
