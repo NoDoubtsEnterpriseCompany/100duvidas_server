@@ -35,7 +35,13 @@ router.get(/\/user\/(\w+)$/, function(req, res){
       error.code = err.code;
       error.message = err.message;
     }else{
-      result = doc;
+        if(doc)
+          result = doc;
+        else{
+          res.status(409);
+          error.code = ErrorCodes.User.NotFound;
+          error.message = "User not found";
+        }
     }
     res.send(JSON.stringify({"result":result, "error":error}));
   });
