@@ -47,6 +47,30 @@ router.get(/\/user\/(\w+)$/, function(req, res){
   });
 });
 
+//Retrieves a user given a email through GET request
+router.get(/\/user/, function(req, res){
+  var email = req.query.email;
+  var error = {};
+  var result = {};
+
+  User.findOne({email:email}, function(err, doc){
+    if(err) {
+      res.status(500);
+      error.code = err.code;
+      error.message = err.message;
+    }else{
+        if(doc)
+          result = doc;
+        else{
+          res.status(409);
+          error.code = ErrorCodes.User.NotFound;
+          error.message = "User not found";
+        }
+    }
+    res.send(JSON.stringify({"result":result, "error":error}));
+  });
+});
+
 /**
  *Recursively loops through a current data JS Object updating it's
  * values with newData's JS Object values
