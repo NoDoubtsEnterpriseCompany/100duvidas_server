@@ -155,7 +155,7 @@ router.post("/addsubject", function(req, res){
     }
   });
 });
-
+//do login based on username and password given by the user
 router.post("/login", function(req,res){
   var username = req.body.login;
   var password = req.body.password;
