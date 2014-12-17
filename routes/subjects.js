@@ -45,19 +45,21 @@ router.get("/", function(req, res){
 
 
 router.post('/addsubject', function(req, res){
+    console.log("body: "+req.body);
     var subject = new Subject(req.body);
     var error= {};
     var result = {};
 
     subject.save(function(err) {
         if (err) {
+            console.log("deu erro no add")
             error.code = err.code;
             error.message = err.message;
             //11000: MongoError's duplicated key
             error.code == 11000 ? res.status(409) : res.status(500);
         }else {
             res.status(201); //HTTP created code
-            result.uri = "/subjects/subject/" + subject.name;
+            result.uri = "/subjects/?name=" + subject.name;
         }
         res.send(JSON.stringify({"result": result, "error": error}));
     });
