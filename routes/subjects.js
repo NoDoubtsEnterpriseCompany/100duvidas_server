@@ -10,7 +10,7 @@ var router = express.Router();
 router.get("/", function(req, res){
         var error =  {};
         var result = {};
-        var subjectName = req.param('subjectName');
+        var subjectName = req.query.name;
     if(!subjectName ){
         Subject.find(function(err, doc){
             if(err){
@@ -24,7 +24,7 @@ router.get("/", function(req, res){
             }
         });
     } else {
-        Subject.findOne(subjectName, function(err, doc){
+        Subject.findOne({name:subjectName}, function(err, doc){
             if(err) {
                 res.status(500);
                 error.code = err.code;
