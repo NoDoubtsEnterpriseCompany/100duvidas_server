@@ -229,4 +229,36 @@ router.put(/\/updateuser\/(\w+)$/, function(req, res){
   });
 });
 
+router.get("/", function(req, res){
+  var subject = req.query.subject;
+  var error = {};
+  var result = {};
+	
+  if (subject!==undefined) {
+	User.find({"profile.subjects.name":subject}, function(err, doc){
+    if(err) {
+      res.status(500);
+      error.code = err.code;
+      error.message = err.message;
+    }else{
+      result = doc;
+    }
+    res.send(JSON.stringify({"result":result, "error":error}));
+  });
+  }
+  else {
+  User.find( function(err, doc){
+    if(err) {
+      res.status(500);
+      error.code = err.code;
+      error.message = err.message;
+    }else{
+      result = doc;
+    }
+    res.send(JSON.stringify({"result":result, "error":error}));
+  });
+  }
+});
+
+
 module.exports = router;

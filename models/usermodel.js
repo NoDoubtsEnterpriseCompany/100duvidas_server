@@ -18,7 +18,7 @@ var UserSchema = new mongoose.Schema(
             gender: Number,
             degree: String,
             speciality: String,
-            subjects: [mongoose.Schema.Types.ObjectId]
+            subjects: [mongoose.Schema.Types.Mixed]
         }
     }
 );
