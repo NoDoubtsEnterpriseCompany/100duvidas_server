@@ -1,5 +1,6 @@
 var express = require('express');
 var User = require('../models/usermodel');
+var Subject = require("../models/subjectmodel");
 var ErrorCodes = require('../exceptions/errorcodes');
 var router = express.Router();
 
@@ -126,24 +127,41 @@ function updateUserData(res, newData, doc) {
  */
 router.post("/addsubject", function(req, res){
   var username = req.body.username;
-  var subject_id = req.body.subject_id;
+  var subject_name = req.body.name;
   var error = {};
   var result = {};
+  var subject_id = "";
 
-  User.findOne({"username":username}, function(err, doc){
+  Subject.findOne({"name":subject_name}, function(err, doc){
     if(err){
       res.status(500);
       error.code = err.code;
       error.message = err.message;
       res.send(JSON.stringify({"result":result, "error":error}));
     }else if(doc){
-      doc.profile.subjects.push(subject_id);
-      doc.update({profile:{subjects:doc.profile.subjects}},function(err){
-        if(err)
+      subject_id = doc._id;
+
+      User.findOne({"username":username}, function(err, doc){
+        if(err){
           res.status(500);
-        else{
-          res.status(201);
-          result.uri = "/users/user/" + username;
+          error.code = err.code;
+          error.message = err.message;
+          res.send(JSON.stringify({"result":result, "error":error}));
+        }else if(doc){
+          doc.profile.subjects.push(subject_id);
+          doc.update({profile:{subjects:doc.profile.subjects}},function(err){
+            if(err)
+              res.status(500);
+            else{
+              res.status(201);
+              result.uri = "/users/user/" + username;
+              res.send(JSON.stringify({"result":result, "error":error}));
+            }
+          });
+        }else{
+          res.status(500);
+          error.code = err.code;
+          error.message = err.message;
           res.send(JSON.stringify({"result":result, "error":error}));
         }
       });
