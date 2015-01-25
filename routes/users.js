@@ -258,6 +258,7 @@ router.get("/", function(req, res){
       res.status(500);
       error.code = err.code;
       error.message = err.message;
+      res.send(JSON.stringify({"result":result, "error":error}));
     }else{
       if(doc) {
         console.log(doc);
@@ -270,10 +271,10 @@ router.get("/", function(req, res){
             console.log(data);
             result = data;
           }
+          res.send(JSON.stringify({"result":result, "error":error}));
         });
       }
     }
-    res.send(JSON.stringify({"result":result, "error":error}));
   });
   }
   else {
