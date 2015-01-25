@@ -251,15 +251,27 @@ router.get("/", function(req, res){
   var subject = req.query.subject;
   var error = {};
   var result = {};
-	
+
   if (subject!==undefined) {
-	User.find({"profile.subjects.name":subject}, function(err, doc){
+	Subject.findOne({"name":subject}, function(err, doc){
     if(err) {
       res.status(500);
       error.code = err.code;
       error.message = err.message;
     }else{
-      result = doc;
+      if(doc) {
+        console.log(doc);
+        doc.getUsers(function (err, data) {
+          if (err) {
+            res.status(500);
+            error.code = err.code;
+            error.message = err.message;
+          } else {
+            console.log(data);
+            result = data;
+          }
+        });
+      }
     }
     res.send(JSON.stringify({"result":result, "error":error}));
   });
