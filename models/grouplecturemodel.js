@@ -6,12 +6,13 @@ var mongoose = require('mongoose');
 var GroupSchema = new mongoose.Schema(
     {
         name: {type: String, required:true},
-		date: {type: Date},
+		date: {type: Date, required:true},
 		professor: {
-			username: String,
+			username: {type: String, required:true},
 			name: String
 		},
-		registered: [{ type : String, ref: 'User' }]
+		registered: [{ type : String, ref: 'User' }],
+		numMaxStudents: {type: Number, required:true}
     }
 );
 

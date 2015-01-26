@@ -3,7 +3,7 @@ var http = require('http');
 var options = {
       hostname: 'localhost',
         port: 3000,
-          path: '/groups/addGroupLecture',
+          path: '/groupslecture/addGroupLecture',
             method: 'POST',
             headers: {"Content-Type": "application/json"}
 };
@@ -26,6 +26,7 @@ group = {};
 group.date = new Date();
 group.name = "turma angular data";
 group.professor = {};
+group.numMaxStudents = 10;
 group.professor.username = "jeymisson"; //jeymisson must be registered on system
 
 req.write(JSON.stringify(group));

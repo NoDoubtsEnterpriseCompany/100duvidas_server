@@ -1,6 +1,6 @@
 var express = require('express');
 var User = require('../models/usermodel');
-var Group = require('../models/groupmodel');
+var Group = require('../models/grouplecturemodel');
 var ErrorCodes = require('../exceptions/errorcodes');
 var router = express.Router();
 
