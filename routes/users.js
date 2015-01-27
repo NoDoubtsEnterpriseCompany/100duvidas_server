@@ -1,6 +1,8 @@
 var express = require('express');
+var ObjectId = require('mongoose').Types.ObjectId;
 var User = require('../models/usermodel');
 var Subject = require("../models/subjectmodel");
+var Lecture = require("../models/lecturemodel");
 var ErrorCodes = require('../exceptions/errorcodes');
 var router = express.Router();
 
@@ -291,5 +293,32 @@ router.get("/", function(req, res){
   }
 });
 
+router.post("/requestlecture", function(req,res) {
+  var student = req.body.student;
+  var teacher = req.body.teacher;
+  var subject = req.body.subject;
+  var date = new Date(req.body.date);
+  var price = req.body.price;
+  console.log("student: " + new ObjectId(student));
+  console.log("date: " + date);
+  var error = {};
+  var result = {};
+
+  var lecture = new Lecture({"date":date, "student":new ObjectId(student),
+  "teacher": new ObjectId(teacher), "subject": new ObjectId(subject),
+    "price": price});
+
+  lecture.save(function(err){
+    if(err){
+      error.code = err.code;
+      error.message = err.message;
+      res.status(500);
+    }else{
+      result.uri = "lectures/lecture/" + lecture._id;
+      res.status(201);
+    }
+    res.send(JSON.stringify({"result":result, "error":error}));
+  });
+});
 
 module.exports = router;

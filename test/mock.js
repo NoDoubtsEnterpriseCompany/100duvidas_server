@@ -29,6 +29,14 @@ monky.factory('Subject',  {
     }
 );
 
+monky.factory('Lecture', {
+    date: new Date(),
+    subject: monky.ref('Subject'),
+    teacher: monky.ref('User'),
+    student: monky.ref('User'),
+    price: 30.0
+});
+
 // Mongoose connect and other setup stuff
 
 module.exports.monky = monky;
