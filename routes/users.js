@@ -32,7 +32,7 @@ router.get(/\/user\/(\w+)$/, function(req, res){
   var error = {};
   var result = {};
 
-  User.findOne({username:username}, function(err, doc){
+  User.findOne({username:username}).populate("profile.groupLecturesRegistered", "name").populate("profile.groupLecturesCreated", "name").exec(function(err, doc){
     if(err) {
       res.status(500);
       error.code = err.code;

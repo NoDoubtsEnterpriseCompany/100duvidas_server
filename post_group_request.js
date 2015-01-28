@@ -3,7 +3,7 @@ var http = require('http');
 var options = {
       hostname: 'localhost',
         port: 3000,
-          path: '/groupslecture/addGroupLecture',
+          path: '/grouplectures/addGroupLecture',
             method: 'POST',
             headers: {"Content-Type": "application/json"}
 };

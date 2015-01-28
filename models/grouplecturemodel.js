@@ -11,8 +11,8 @@ var GroupSchema = new mongoose.Schema(
 			username: {type: String, required:true},
 			name: String
 		},
-		registered: [{ type : String, ref: 'User' }],
-		numMaxStudents: {type: Number, required:true}
+		numMaxStudents: {type: Number, required:true},
+		studentsRegistered: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]
     }
 );
 

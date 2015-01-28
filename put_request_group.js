@@ -3,7 +3,7 @@ var http = require('http');
 var options = {
       hostname: 'localhost',
         port: 3000,
-          path: '/groupslecture/grouplecture/54c45b8ee7f53084510407fc',
+          path: '/grouplectures/grouplecture/54c96429a7ceafe09745ea2a/addUser',
             method: 'PUT',
             headers: {"Content-Type": "application/json"}
 };
@@ -22,12 +22,9 @@ req.on('error', function(e) {
 });
 
 //write data to request body
-group = {};
-group.name = "turma java";
-group.professorUserName = "jeymisson";
-group._id = "54c45b8ee7f53084510407fc"; //Check the correct group's id.
-group.registered = ["jeymisson"]; //Adding new student
+user = {};
+user.username = "jeymisson";
 
 
-req.write(JSON.stringify(group));
+req.write(JSON.stringify(user));
 req.end();

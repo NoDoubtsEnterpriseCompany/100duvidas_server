@@ -29,11 +29,62 @@ router.get('/', function(req, res) {
         });
 });
 
+router.put(/\/grouplecture\/(\w+)\/addUser$/, function(req, res) {
+  var groupId = req.params[0];
+  var putData = req.body;
+  var user = new User(putData);
+  var result = {};
+  var error = {};
+  User.findOne({username:user.username}, function(err, user) {
+    if (err) {
+		res.status(404);
+        error.code = err.code;
+        error.message = err.message;
+		res.send(JSON.stringify({"result":result, "error":error}));
+	} else {
+		console.log(user);
+		user.profile.groupLecturesRegistered.push(groupId);
+		User.update({username:user.username}, user, {}, function(err2, data) {
+			if(err2) {
+				res.status(404);
+				error.code = err2.code;
+				error.message = err2.message;
+				res.send(JSON.stringify({"result":result, "error":error}));
+			} else {
+				console.log("update user");
+				Group.findOne({_id:groupId}).exec(function(err3, group){
+					if (err3) {
+						res.status(404);
+						error.code = err3.code;
+						error.message = err3.message;
+						res.send(JSON.stringify({"result":result, "error":error}));
+					} else {
+						console.log("find group")
+						group.studentsRegistered.push(user._id);
+						Group.update({_id: group._id}, group, {}, function(err4, up) {
+							if (err4) {
+								res.status(404);
+								error.code = err4.code;
+								error.message = err4.message;
+							} else {
+								console.log("update user");
+								result = up;
+							}
+							res.send(JSON.stringify({"result":result, "error":error}));
+						});
+					}
+				});
+			}
+		});
+	}
+  });
+});
+
 router.get(/\/grouplecture\/(\w+)$/, function(req, res) {
    var id = req.params[0];
    var error =  {};
    var result = {};
-   Group.findOne({_id:id}, function(err, doc){
+   Group.findOne({_id:id}).populate("studentsRegistered").exec(function(err, doc){
     if(err) {
       res.status(500);
       error.code = err.code;

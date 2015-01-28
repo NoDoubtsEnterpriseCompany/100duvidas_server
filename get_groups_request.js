@@ -1,5 +1,5 @@
 var http = require('http');
-http.get("http://localhost:3000/groupslecture", function(res) {
+http.get("http://localhost:3000/grouplectures", function(res) {
       console.log("Got response: " + res.statusCode);
 
       res.on("data", function(data){
