@@ -139,6 +139,8 @@ router.post('/addGroupLecture', function(req, res) {
               //11000: MongoError's duplicated key
               error.code == 11000 ? res.status(409) : res.status(500);
             }else {
+			  doc.profile.groupLecturesCreated.push(group._id);
+			  doc.save();
               res.status(201); //HTTP created code
               result.uri = "/groups/group/" + group.name;
             }
