@@ -141,7 +141,7 @@ router.post("/addsubject", function(req, res){
       error.message = err.message;
       res.send(JSON.stringify({"result":result, "error":error}));
     }else if(doc){
-      subject_id = doc._id;
+      var subject = doc;
 
       User.findOne({"username":username}, function(err, doc){
         if(err){
@@ -150,14 +150,20 @@ router.post("/addsubject", function(req, res){
           error.message = err.message;
           res.send(JSON.stringify({"result":result, "error":error}));
         }else if(doc){
-          doc.profile.subjects.push(subject_id);
+          doc.profile.subjects.push(subject._id);
           doc.update({profile:{subjects:doc.profile.subjects}},function(err){
             if(err)
               res.status(500);
             else{
-              res.status(201);
-              result.uri = "/users/user/" + username;
-              res.send(JSON.stringify({"result":result, "error":error}));
+              subject.teachers.push(doc._id);
+              subject.update({teachers:subject.teachers},function(err){
+                if(err){
+                  console.log(err);
+                }
+                res.status(201);
+                result.uri = "/users/user/" + username;
+                res.send(JSON.stringify({"result":result, "error":error}));
+              });
             }
           });
         }else{

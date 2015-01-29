@@ -12,7 +12,7 @@ router.get("/", function(req, res){
         var result = {};
         var subjectName = req.query.name;
     if(!subjectName ){
-        Subject.find(function(err, doc){
+        Subject.find().populate("teachers").exec(function(err, doc){
             if(err){
                 res.status(500);
                 error.code = err.code;
@@ -24,14 +24,15 @@ router.get("/", function(req, res){
             }
         });
     } else {
-        Subject.findOne({name:subjectName}, function(err, doc){
+        Subject.findOne({name:subjectName}).populate("teachers").exec(function(err, doc){
             if(err) {
                 res.status(500);
                 error.code = err.code;
                 error.message = err.message;
             }else{
-                if(doc)
+                if(doc) {
                     result = doc;
+                }
                 else{
                     res.status(409);
                     error.code = ErrorCodes.Subject.NotFound;
