@@ -189,7 +189,7 @@ router.post("/addsubject", function(req, res){
           res.send(JSON.stringify({"result":result, "error":error}));
         }else if(doc){
           doc.profile.subjects.push(subject._id);
-          doc.update({profile:{subjects:doc.profile.subjects}},function(err){
+          doc.update({profile:doc.profile},function(err){
             if(err)
               res.status(500);
             else{
