@@ -3,6 +3,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var User = require('../models/usermodel');
 var Subject = require("../models/subjectmodel");
 var Lecture = require("../models/lecturemodel");
+var Rating = require("../models/ratingmodel");
 var ErrorCodes = require('../exceptions/errorcodes');
 var router = express.Router();
 
@@ -123,6 +124,38 @@ function updateUserData(res, newData, doc) {
     res.send({"result": result, "error": error});
   });
 }
+
+router.pos("/addrating",function(req,res){
+    var rating = req.body.rating;
+    var username = req.body.username;
+    var error = {};
+    var result = {};
+    User.findOne({"username":username},function(err,doc){
+        if(err){
+            res.status(500);
+            error.code = err.code;
+            error.message = err.message;
+            res.send(JSON.stringify({"result":result, "error":error}));
+        }else if(doc){
+            doc.profile.ratings.push(rating._id);
+            doc.update({profile:{ratings:doc.profile.ratings}},function(err){
+                if(err)
+                    res.status(500);
+                else{}
+            });
+        }else{
+            res.status(500);
+            error.code = err.code;
+            error.message = err.message;
+            res.send(JSON.stringify({"result":result, "error":error}));
+        }
+
+
+
+    });
+});
+
+
 
 /**
  * Adds a given subject to a user
