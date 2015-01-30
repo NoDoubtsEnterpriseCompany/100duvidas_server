@@ -20,7 +20,10 @@ var UserSchema = new mongoose.Schema(
             speciality: String,
             subjects: [{type:mongoose.Schema.Types.ObjectId, ref:"Subject", unique:true}],
 			groupLecturesRegistered: [{type:mongoose.Schema.Types.ObjectId, ref:"GroupLecture"}],
-			groupLecturesCreated: [{type:mongoose.Schema.Types.ObjectId, ref:"GroupLecture"}]
+			groupLecturesCreated: [{type:mongoose.Schema.Types.ObjectId, ref:"GroupLecture"}],
+            totalScore: Number,
+            ratings:[{type:mongoose.Schema.Types.ObjectId, ref:"Rating"}],
+            mean:Number
         }
     }
 );
