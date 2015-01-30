@@ -125,7 +125,7 @@ function updateUserData(res, newData, doc) {
   });
 }
 
-router.pos("/addrating",function(req,res){
+router.post("/addrating",function(req,res){
     var rating = req.body.rating;
     var username = req.body.username;
     var error = {};
@@ -138,15 +138,20 @@ router.pos("/addrating",function(req,res){
             res.send(JSON.stringify({"result":result, "error":error}));
         }else if(doc){
             doc.profile.ratings.push(rating._id);
-            doc.update({profile:{ratings:doc.profile.ratings}},function(err){
+            var totalscore = doc.profile.totalScore+=rating.score;
+            var mean = doc.profile.totalScore / doc.profile.ratings.size();
+
+            doc.update({profile:{ratings:doc.profile.ratings,totalScore:totalscore,mean:mean}},function(err){
                 if(err)
                     res.status(500);
-                else{}
+                else{
+
+                }
             });
         }else{
-            res.status(500);
-            error.code = err.code;
-            error.message = err.message;
+            res.status(404);
+            error.code = ErrorCodes.User.NotFound;
+            error.message = "User not found";
             res.send(JSON.stringify({"result":result, "error":error}));
         }
 
