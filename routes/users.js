@@ -126,40 +126,6 @@ function updateUserData(res, newData, doc) {
   });
 }
 
-router.post("/addrating",function(req,res){
-    var rating = req.body.rating;
-    var username = req.body.username;
-    var error = {};
-    var result = {};
-    User.findOne({"username":username},function(err,doc){
-        if(err){
-            res.status(500);
-            error.code = err.code;
-            error.message = err.message;
-            res.send(JSON.stringify({"result":result, "error":error}));
-        }else if(doc){
-            doc.profile.ratings.push(rating._id);
-            var totalscore = doc.profile.totalScore+=rating.score;
-            var mean = doc.profile.totalScore / doc.profile.ratings.size();
-
-            doc.update({profile:{ratings:doc.profile.ratings,totalScore:totalscore,mean:mean}},function(err){
-                if(err)
-                    res.status(500);
-                else{
-
-                }
-            });
-        }else{
-            res.status(404);
-            error.code = ErrorCodes.User.NotFound;
-            error.message = "User not found";
-            res.send(JSON.stringify({"result":result, "error":error}));
-        }
-
-
-
-    });
-});
 
 
 
@@ -364,6 +330,62 @@ router.post("/requestlecture", function(req,res) {
     }
     res.send(JSON.stringify({"result":result, "error":error}));
   });
+});
+
+
+router.post(/\/addrating\/(\w+)$/, function(req, res){
+    var teacherusername = req.params[0];
+    var student = req.body.student;
+    console.log("teacher"+teacherusername);
+    console.log("student" + student);
+    var rating = new Rating(req.body.rating);
+    console.log("rating" + rating._id);
+
+    rating.save(function(err){
+        if(err){
+            error.code = err.code;
+            error.message = err.message;
+            res.status(500);
+        }else{
+            //result.uri= "";
+            res.status(201);
+            console.log("salvou");
+        }
+        res.send(JSON.stringify({"result":result, "error":error}));
+
+    });
+    var error = {};
+    var result = {};
+    User.findOne({"username":teacherusername},function(err,doc){
+        if(err){
+            res.status(500);
+            error.code = err.code;
+            error.message = err.message;
+            res.send(JSON.stringify({"result":result, "error":error}));
+        }else if(doc){
+            doc.profile.ratings.push(rating._id);
+            doc.profile.totalScore+=rating.score;
+            doc.profile.mean = doc.profile.totalScore / doc.profile.ratings.length;
+
+            doc.update({profile: doc.profile   },function(err){
+                if(err)
+                    res.status(500);
+                else{
+                    res.status(201);
+                    res.send()
+
+                }
+            });
+        }else{
+            res.status(404);
+            error.code = ErrorCodes.User.NotFound;
+            error.message = "User not found";
+            res.send(JSON.stringify({"result":result, "error":error}));
+        }
+
+
+
+    });
 });
 
 module.exports = router;
