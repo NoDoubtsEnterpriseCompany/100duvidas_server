@@ -335,11 +335,7 @@ router.post("/requestlecture", function(req,res) {
 router.post(/\/addrating\/(\w+)$/, function(req, res){
     var teacherusername = req.params[0];
     var student = req.body.student;
-    console.log("teacher"+teacherusername);
-    console.log("student" + student);
     var rating = new Rating(req.body.rating);
-    console.log("rating" + rating._id);
-
     rating.save(function(err){
         if(err){
             error.code = err.code;
@@ -371,8 +367,7 @@ router.post(/\/addrating\/(\w+)$/, function(req, res){
                     res.status(500);
                 else{
                     res.status(201);
-                    res.send()
-
+                    result.uri="users/user/"+ teacherusername       ;
                 }
             });
         }else{
