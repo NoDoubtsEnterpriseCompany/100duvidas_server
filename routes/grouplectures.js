@@ -6,16 +6,14 @@ var router = express.Router();
 
 router.get('/', function(req, res) {
    var filters = {};
-   var groupName = req.query.name;
    var groupProfessorUserName = req.query.professor;
+   console.log(groupProfessorUserName);
    var error =  {};
    var result = {};
-   if (groupName !== undefined) {
-	 filters.name = groupName;
-   }
    if (groupProfessorUserName !== undefined) {
-	 filters.professor.username = groupProfessorUserName;
+	 filters = {"professor.username":groupProfessorUserName};
    }
+   console.log(filters);
    Group.find(filters, function(err, doc){
             if(err){
                 res.status(500);

@@ -7,9 +7,13 @@ var GroupSchema = new mongoose.Schema(
     {
         name: {type: String, required:true},
 		date: {type: Date, required:true},
+		price: {type: Number, required: true},
+		address: {type: String, required: true},
 		professor: {
 			username: {type: String, required:true},
-			name: String
+			profile: {
+				name: String
+			}
 		},
 		numMaxStudents: {type: Number, required:true},
 		studentsRegistered: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]
