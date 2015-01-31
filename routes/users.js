@@ -33,7 +33,7 @@ router.get(/\/user\/(\w+)$/, function(req, res){
   var error = {};
   var result = {};
 
-  User.findOne({username:username}).populate("profile.groupLecturesRegistered", "name").populate("profile.groupLecturesCreated", "name").exec(function(err, doc){
+  User.findOne({username:username}, function(err, doc){
     if(err) {
       res.status(500);
       error.code = err.code;
@@ -63,8 +63,9 @@ router.get(/\/user/, function(req, res){
       error.code = err.code;
       error.message = err.message;
     }else{
-        if(doc)
-          result = doc;
+        if(doc) {
+            result = doc;
+        }
         else{
           res.status(409);
           error.code = ErrorCodes.User.NotFound;
