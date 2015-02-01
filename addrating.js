@@ -3,7 +3,7 @@ var http = require('http');
 var options = {
     hostname: 'localhost',
     port: 3000,
-    path: '/users/addrating/tiaraju',
+    path: '/users/addrating/teste',
     method: 'POST',
     headers: {"Content-Type": "application/json"}
 };
@@ -24,7 +24,7 @@ req.on('error', function(e) {
 //write data to request body
 
 student = {};
-student.username="tsmaneoto@yahoo.com.br";
+student.username="tiaraju";
 
 rating = {};
 rating.score = 4;
