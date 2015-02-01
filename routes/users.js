@@ -383,4 +383,29 @@ router.post(/\/addrating\/(\w+)$/, function(req, res){
     });
 });
 
+
+router.get(/\/rating\/(\w+)$/, function(req, res){
+    var error =  {};
+    var result = {};
+    var id = req.params[0];
+    Rating.findOne({_id:id}, function(err, doc){
+        if(err) {
+            res.status(500);
+            error.code = err.code;
+            error.message = err.message;
+        }else{
+            if(doc) {
+                result = doc;
+            }
+            else{
+                res.status(409);
+                error.code = ErrorCodes.Rating.NotFound;
+                error.message = "Rating not found";
+            }
+        }
+        res.send(JSON.stringify({"result":result, "error":error}));
+    });
+
+});
+
 module.exports = router;
