@@ -12,7 +12,7 @@ var UserSchema = new mongoose.Schema(
         password: {type: String, required:true},
         email: {type: String, required: true, unique: true},
         profile: {
-            name: String,
+            name: {type: String, required:true},
             age: Number,
             profilePic: String,
             gender: Number,
@@ -21,9 +21,9 @@ var UserSchema = new mongoose.Schema(
             subjects: [{type:mongoose.Schema.Types.ObjectId, ref:"Subject", unique:true}],
 			groupLecturesRegistered: [{type:mongoose.Schema.Types.ObjectId, ref:"GroupLecture"}],
 			groupLecturesCreated: [{type:mongoose.Schema.Types.ObjectId, ref:"GroupLecture"}],
-            totalScore: Number,
+            totalScore: {type: Number, default:0},
             ratings:[{type:mongoose.Schema.Types.ObjectId, ref:"Rating"}],
-            mean:Number
+            mean:{type: Number, default:0}
         }
     }
 );

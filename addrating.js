@@ -3,7 +3,7 @@ var http = require('http');
 var options = {
     hostname: 'localhost',
     port: 3000,
-    path: '/users/addrating/jeymisson',
+    path: '/users/addrating/tiaraju',
     method: 'POST',
     headers: {"Content-Type": "application/json"}
 };
@@ -27,7 +27,7 @@ student = {};
 student.username="tsmaneoto@yahoo.com.br";
 
 rating = {};
-rating.score = 5;
+rating.score = 4;
 rating.comment="he rocks" ;
 rating.commenter = student;
 
