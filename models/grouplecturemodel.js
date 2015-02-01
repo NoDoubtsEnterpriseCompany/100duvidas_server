@@ -9,6 +9,8 @@ var GroupSchema = new mongoose.Schema(
 		date: {type: Date, required:true},
 		price: {type: Number, required: true},
 		address: {type: String, required: true},
+		description: {type: String, required: false},
+		subject: {type: mongoose.Schema.Types.ObjectId, ref: "Subject"},
 		professor: {
 			username: {type: String, required:true},
 			profile: {
