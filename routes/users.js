@@ -126,9 +126,6 @@ function updateUserData(res, newData, doc) {
   });
 }
 
-
-
-
 /**
  * Adds a given subject to a user
  */
@@ -157,7 +154,7 @@ router.post("/addsubject", function(req, res){
                     var lecture = new Lecture({
                         "price":req.body.price,
                         "teacher": doc._id,
-                        "subject": new subject});
+                        "subject": subject});
 
                     lecture.save(function (err) {
                         if (err) {
