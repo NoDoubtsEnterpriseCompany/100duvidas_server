@@ -7,11 +7,14 @@ var router = express.Router();
 router.get('/', function(req, res) {
    var filters = {};
    var groupProfessorUserName = req.query.professor;
-   console.log(groupProfessorUserName);
+   var groupSubjectId = req.query.subject;
    var error =  {};
    var result = {};
    if (groupProfessorUserName !== undefined) {
 	 filters = {"professor.username":groupProfessorUserName};
+   }
+   if (groupSubjectId !== undefined) {
+	 filters = {"subject":groupSubjectId};	
    }
    console.log(filters);
    Group.find(filters, function(err, doc){
