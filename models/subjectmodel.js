@@ -7,8 +7,7 @@ var User = require('./usermodel');
 var SubjectSchema = new mongoose.Schema(
     {
         name: {type: String, required:true, unique: true},
-        description: {type: String},
-        teachers: [{type: mongoose.Schema.Types.ObjectId, ref:"User"}]
+        description: {type: String}
     }
 );
 

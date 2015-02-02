@@ -134,19 +134,9 @@ function updateUserData(res, newData, doc) {
  */
 router.post("/addsubject", function(req, res){
   var username = req.body.username;
-  var subject_name = req.body.name;
+  var subject = new ObjectId(req.body.subject_id);
   var error = {};
   var result = {};
-  var subject_id = "";
-
-  Subject.findOne({"name":subject_name}, function(err, doc){
-    if(err){
-      res.status(500);
-      error.code = err.code;
-      error.message = err.message;
-      res.send(JSON.stringify({"result":result, "error":error}));
-    }else if(doc){
-      var subject = doc;
 
       User.findOne({"username":username}, function(err, doc){
         if(err){
@@ -154,38 +144,35 @@ router.post("/addsubject", function(req, res){
           error.code = err.code;
           error.message = err.message;
           res.send(JSON.stringify({"result":result, "error":error}));
-        }else if(doc){
-          doc.profile.subjects.push(subject._id);
-          doc.update({profile:doc.profile},function(err){
-            if(err)
-              res.status(500);
-            else{
-              subject.teachers.push(doc._id);
-              subject.update({teachers:subject.teachers},function(err){
-                if(err){
-                  console.log(err);
+        }else {
+            doc.profile.subjects.push(subject);
+            doc.update({profile: doc.profile}, function (err) {
+                if (err) {
+                    res.status(500);
+                    error.code = err.code;
+                    error.message = err.message;
+                    res.send(JSON.strigify({"result":result, "error": error}));
                 }
-                res.status(201);
-                result.uri = "/users/user/" + username;
-                res.send(JSON.stringify({"result":result, "error":error}));
-              });
-            }
-          });
-        }else{
-          res.status(500);
-          error.code = err.code;
-          error.message = err.message;
-          res.send(JSON.stringify({"result":result, "error":error}));
+                else {
+                    var lecture = new Lecture({
+                        "price":req.body.price,
+                        "teacher": doc._id,
+                        "subject": new subject});
+
+                    lecture.save(function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        res.status(201);
+                        result.uri = "/users/user/" + username;
+                        res.send(JSON.stringify({"result": result, "error": error}));
+                    });
+                }
+            });
         }
       });
-    }else{
-      res.status(500);
-      error.code = err.code;
-      error.message = err.message;
-      res.send(JSON.stringify({"result":result, "error":error}));
-    }
   });
-});
+
 //do login based on username and password given by the user
 router.post("/login", function(req,res){
   var username = req.body.login;
