@@ -3,12 +3,13 @@
  */
 
 var mongoose = require('mongoose');
+var User = require('../models/usermodel');
 
 var RatingSchema = new mongoose.Schema(
     {
-        score: {type: Number, required:true},
         comment:{type: String},
-        commenter:{type: mongoose.Schema.Types.Mixed}
+        commenter:{type: mongoose.Schema.Types.Mixed},
+        score: {type: Number, required:true}
 
     }
 );

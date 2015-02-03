@@ -318,9 +318,14 @@ router.post("/requestlecture", function(req,res) {
 
 
 router.post(/\/addrating\/(\w+)$/, function(req, res){
+    //console.log(req);
     var teacherusername = req.params[0];
+    //console.log(teacherusername);
     var student = req.body.student;
+    //console.log(student);
+    console.log(req.body);
     var rating = new Rating(req.body.rating);
+   // console.log(rating);
     rating.save(function(err){
         if(err){
             error.code = err.code;
