@@ -16,9 +16,12 @@
     "mongoose": "*",
     "should": "*",
     "monky": "*",
-    "mocha": "*",
     "bcrypt": "*",
-    "supertest": "*"
+    "mocha": "*",
+    "supertest": "*",
+    "grunt-cli": "*",
+    "grunt": "*",
+    "grunt-mocha-istanbul": "*"
   },
   "devDependencies": {
     "should": "^4.3.0"
