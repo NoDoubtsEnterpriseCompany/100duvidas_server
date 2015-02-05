@@ -3,6 +3,7 @@
  */
 var Subject = require("../models/subjectmodel");
 var User = require("../models/usermodel");
+var ObjectId = require('mongoose').Types.ObjectId;
 var express = require("express");
 var ErrorCodes = require('../exceptions/errorcodes');
 var router = express.Router();
@@ -42,6 +43,24 @@ router.get("/", function(req, res){
             res.send(JSON.stringify({"result":result, "error":error}));
         });
     }
+});
+
+router.get(/\/subject\/(\w+)$/, function(req, res){
+    var subject_id = new ObjectId(req.params[0]);
+    var error = {};
+    var result = {};
+
+    Subject.findOne({_id:subject_id}, function(err, doc){
+        if(err){
+            error.code = err.code;
+            error.message = err.message;
+            res.status(500);
+        }else{
+            res.contentType('application/json');
+            res.status(200);
+            res.send(JSON.stringify({"result": doc, "error":error}));
+        }
+    });
 });
 
 router.post('/addsubject', function(req, res){
