@@ -1,6 +1,8 @@
 var express = require('express');
+var ObjectId = require('mongoose').Types.ObjectId;
 var Subject = require('../models/subjectmodel.js');
 var Lecture = require('../models/lecturemodel');
+var ScheduledLecture = require('../models/scheduledlecturemodel');
 var User = require('../models/usermodel');
 var router = express.Router();
 
@@ -42,6 +44,72 @@ router.get(/\/userlectures\/(\w+)$/, function(req, res) {
             console.log(doc);
             res.send(JSON.stringify({"result":doc, "error":error}));
         }
+    });
+});
+
+router.post("/addlecture", function(req,res) {
+    var student = req.body.student;
+    var teacher = req.body.teacher;
+    var subject = req.body.subject;
+    var address = req.body.address;
+    var date = new Date(req.body.date);
+    var price = req.body.price;
+    console.log(address);
+    var error = {};
+    var result = {};
+
+    var lecture = new Lecture({"date":date,
+        "teacher": new ObjectId(teacher), "subject": new ObjectId(subject),
+        "price": price, "address":address});
+
+    lecture.save(function(err){
+        if(err){
+            error.code = err.code;
+            error.message = err.message;
+            res.status(500);
+            console.log(error.message);
+        }else{
+            result.uri = "lectures/lecture/" + lecture._id;
+            res.status(201);
+        }
+        res.send(JSON.stringify({"result":result, "error":error}));
+    });
+});
+
+router.post("/schedulelecture", function(req,res) {
+    var student = req.body.student;
+    var teacher = req.body.teacher._id;
+    var subject = req.body.subject;
+    var address = req.body.address;
+    console.log("student: " + req.body.student);
+    console.log("teacher: " + req.body.teacher._id);
+    console.log("subject: " + req.body.subject);
+    console.log("address: "+req.body.address);
+    console.log("date: "+req.body.date);
+    console.log("price: " +req.body.price);
+
+    var date = new Date(req.body.date);
+    var price = req.body.price;
+    var error = {};
+    var result = {};
+
+    var lecture = new ScheduledLecture({"date":date, "student":new ObjectId(student),
+        "teacher": new ObjectId(teacher), "subject": new ObjectId(subject),
+        "price": price, "address":address});
+
+    console.log(lecture);
+
+    lecture.save(function(err){
+        if(err){
+            error.code = err.code;
+            error.message = err.message;
+            console.log(error.message);
+            res.status(500);
+        }else{
+            result.uri = "lectures/scheduledlecture/" + lecture._id;
+            res.status(201);
+        }
+        res.send(JSON.stringify({"result":result, "error":error}));
     });
 });
 

@@ -3,16 +3,15 @@
  */
 
 var mongoose = require("mongoose");
-var User = require("./usermodel");
 
-var LectureSchema = new mongoose.Schema({
+var ScheduledLectureSchema = new mongoose.Schema({
     date: {type: Date},
     subject: {type:mongoose.Schema.Types.ObjectId, ref:"Subject"},
     teacher: {type:mongoose.Schema.Types.ObjectId, ref:"User"},
+    student: {type:mongoose.Schema.Types.ObjectId, ref:"User"},
     price: {type: Number},
-    address: {type:String}
+    address: {type: String}
+
 });
 
-LectureSchema.index({subject: 1, teacher: 1}, {unique: true});
-
-module.exports = mongoose.model("Lecture",LectureSchema);
+module.exports = mongoose.model("ScheduledLecture",ScheduledLectureSchema);
