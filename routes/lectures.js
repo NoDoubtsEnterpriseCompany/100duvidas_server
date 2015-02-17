@@ -113,4 +113,29 @@ router.post("/schedulelecture", function(req,res) {
     });
 });
 
+router.get('/scheduledlecture', function(req, res) {
+   var filters = {};
+   var teacherId = req.query.teacher;
+   var studentId = req.query.student;
+   var error =  {};
+   var result = {};
+   if (teacherId !== undefined) {
+	 filters = {"teacher":teacherId};
+   }
+   if (studentId !== undefined) {
+	 filters = {"student":studentId};	
+   }
+   ScheduledLecture.find(filters).populate("teacher").exec(function(err, doc){
+            if(err){
+                res.status(500);
+                error.code = err.code;
+                error.message = err.message;
+            }else{
+                result = doc;
+                res.contentType('application/json');
+                res.send(JSON.stringify({"result":result, "error":error}));
+            }
+        });
+});
+
 module.exports = router;
