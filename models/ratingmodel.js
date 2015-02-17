@@ -8,7 +8,7 @@ var User = require('../models/usermodel');
 var RatingSchema = new mongoose.Schema(
     {
         comment:{type: String},
-        commenter:{type: mongoose.Schema.Types.Mixed},
+        commenter:{type:mongoose.Schema.Types.ObjectId, ref:"User"},
         score: {type: Number, required:true}
 
     }

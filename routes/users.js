@@ -328,7 +328,7 @@ router.post(/\/addrating\/(\w+)$/, function(req, res){
                     res.status(500);
                 else{
                     res.status(201);
-                    result.uri="users/user/"+ teacherusername       ;
+                    result.uri="users/user/"+ teacherusername;
                 }
             });
         }else{
@@ -340,26 +340,30 @@ router.post(/\/addrating\/(\w+)$/, function(req, res){
     });
 });
 
-
+/**
+ * return a list of ratings given an username
+ */
 router.get(/\/rating\/(\w+)$/, function(req, res){
     var error =  {};
     var result = {};
-    var id = req.params[0];
-    Rating.findOne({_id:id}, function(err, doc){
+    var teacherUserName = req.params[0];
+    User.findOne({username:teacherUserName}).populate("profile.ratings").exec(function(err, doc) {
         if(err) {
             res.status(500);
             error.code = err.code;
             error.message = err.message;
         }else{
             if(doc) {
-                result = doc;
+                result = doc.profile.ratings;
             }
             else{
                 res.status(409);
-                error.code = ErrorCodes.Rating.NotFound;
-                error.message = "Rating not found";
+                error.code = ErrorCodes.User.NotFound;
+                error.message = "User not found";
             }
         }
+        console.log("doc "+doc);
+        console.log("result " + result);
         res.send(JSON.stringify({"result":result, "error":error}));
     });
 
