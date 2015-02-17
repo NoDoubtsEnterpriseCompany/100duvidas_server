@@ -5,7 +5,7 @@ var fs = require("fs");
 var path = require("path");
 var mongoose = require("mongoose");
 
-var db_config = {}
+var db_config = {};
 
 var data = fs.readFileSync(path.join(__dirname, "database.cfg"), "utf-8");
 

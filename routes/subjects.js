@@ -71,7 +71,6 @@ router.post('/addsubject', function(req, res){
 
     subject.save(function(err) {
         if (err) {
-            console.log("deu erro no add")
             error.code = err.code;
             error.message = err.message;
             //11000: MongoError's duplicated key

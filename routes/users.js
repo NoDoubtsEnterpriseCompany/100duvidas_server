@@ -362,8 +362,6 @@ router.get(/\/rating\/(\w+)$/, function(req, res){
                 error.message = "User not found";
             }
         }
-        console.log("doc "+doc);
-        console.log("result " + result);
         res.send(JSON.stringify({"result":result, "error":error}));
     });
 
