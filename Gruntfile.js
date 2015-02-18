@@ -4,7 +4,7 @@ module.exports = function(grunt){
             coverage: {
                 src: 'test', // a folder works nicely
                 options: {
-                    reportFormats: ['cobertura','lcovonly']
+                    reportFormats: ['cobertura','lcovonly', 'html' ]
                 }
             },
             jenkins: {

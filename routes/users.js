@@ -42,7 +42,7 @@ router.get(/\/user\/(\w+)$/, function(req, res){
         if(doc)
           result = doc;
         else{
-          res.status(409);
+          res.status(404);
           error.code = ErrorCodes.User.NotFound;
           error.message = "User not found";
         }
@@ -67,7 +67,7 @@ router.get(/\/user/, function(req, res){
             result = doc;
         }
         else{
-          res.status(409);
+          res.status(404);
           error.code = ErrorCodes.User.NotFound;
           error.message = "User not found";
         }
@@ -227,7 +227,7 @@ router.put(/\/updateuser\/(\w+)$/, function(req, res){
           if(!match) {
             error.code = ErrorCodes.User.PasswordDontMatch;
             error.message = "Passwords don't match";
-            res.status(409);
+            res.status(401);
             return res.send({"result": result, "error": error});
           }
           updateUserData(res, newData, doc);
@@ -251,6 +251,7 @@ router.get("/", function(req, res){
   var result = {};
 
   if (subject!==undefined) {
+
 	Subject.findOne({"name":subject}, function(err, doc){
     if(err) {
       res.status(500);
@@ -259,18 +260,22 @@ router.get("/", function(req, res){
       res.send(JSON.stringify({"result":result, "error":error}));
     }else{
       if(doc) {
-        console.log(doc);
         doc.getUsers(function (err, data) {
           if (err) {
             res.status(500);
             error.code = err.code;
             error.message = err.message;
           } else {
-            console.log(data);
             result = data;
           }
           res.send(JSON.stringify({"result":result, "error":error}));
         });
+      } else {
+          var error = {};
+          error.message = "Subject not found";
+          error.code = ErrorCodes.Subject.NotFound;
+          res.status(404);
+          res.send(JSON.stringify({"result":result, "error":error}));
       }
     }
   });
@@ -357,7 +362,7 @@ router.get(/\/rating\/(\w+)$/, function(req, res){
                 result = doc.profile.ratings;
             }
             else{
-                res.status(409);
+                res.status(404);
                 error.code = ErrorCodes.User.NotFound;
                 error.message = "User not found";
             }
