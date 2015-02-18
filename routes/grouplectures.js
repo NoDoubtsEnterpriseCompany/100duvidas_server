@@ -16,7 +16,9 @@ router.get('/', function(req, res) {
    if (groupSubjectId !== undefined) {
 	 filters = {"subject":groupSubjectId};	
    }
-   console.log(filters);
+   if (studentId !== undefined) {
+	 filters = {"studentsRegistered":studentId};
+   }
    Group.find(filters, function(err, doc){
             if(err){
                 res.status(500);
