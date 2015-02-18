@@ -28,7 +28,7 @@ monky.factory('User',  {
             groupLecturesRegistered: [monky.ref('GroupLecture', 'id')],
             groupLecturesCreated: [monky.ref('GroupLecture', 'id')],
             totalScore: 0,
-            ratings: [monky.ref('Rating', 'id')],
+            ratings: [],
             mean: 0
         }
     }
@@ -50,7 +50,7 @@ monky.factory('Lecture', {
 
 monky.factory('Rating', {
     comment: 'comment#n',
-    commenter: 'id#n',
+    commenter: monky.ref('User', 'id'),
     score: 3
 });
 

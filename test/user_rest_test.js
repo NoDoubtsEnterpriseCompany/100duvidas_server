@@ -16,20 +16,15 @@ var app = require("../app");
 //Mesmo teste com should js
 describe('REST POST TEST - User', function () {
     beforeEach(function() {
-        // runs before all tests in this block
         mongoose.connection.db.executeDbCommand( {dropDatabase:1}, function(err, result) { if (err) { console.log(err); } });
     });
     it('Posting a user', function (done) {
-        // Usando monky, mock, para mockar um user
         monky.build('User', function (err, user) {
-            // request é o objeto, superteste,  responsavel pelos testes
             request(app)
                 .post('/users/adduser')
                 .send(user)
                 .set('Accept', 'application/json')
                 .expect(201)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                     done(); // informar o final do teste ao mocha
@@ -40,22 +35,19 @@ describe('REST POST TEST - User', function () {
     it('Adding a subject to the user', function(done){
         this.timeout(5000);
         monky.create('User', function(err, user){
+            console.log(err);
             var subjectsSize = user.profile.subjects.length;
 
             monky.create('Subject', function(err, subject){
-
                 var data = {
                     username: user.username,
                     subject_id: subject._id
                 };
-
                 request(app)
                     .post('/users/addsubject')
                     .send(data)
                     .set('Accept', 'application/json')
                     .expect(201)
-                    // REST Testing ate aqui, end function recebe a response
-                    // e pode se utilizar low level testing a partir dai
                     .end(function (err, res) {
                         should.not.exist(err); // Should.js
                         done(); // informar o final do teste ao mocha
@@ -72,14 +64,11 @@ describe('REST POST TEST - User', function () {
                 password: user.password
             };
 
-            // request é o objeto, superteste,  responsavel pelos testes
             request(app)
                 .post('/users/adduser')
                 .send(user)
                 .set('Accept', 'application/json')
                 .expect(201)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                 });
@@ -90,8 +79,6 @@ describe('REST POST TEST - User', function () {
                 .send(data)
                 .set('Accept', 'application/json')
                 .expect(200)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                     done(); // informar o final do teste ao mocha
@@ -109,26 +96,20 @@ describe('REST POST TEST - User', function () {
                 password: notTheRightPassword
             };
 
-            // request é o objeto, superteste,  responsavel pelos testes
             request(app)
                 .post('/users/adduser')
                 .send(user)
                 .set('Accept', 'application/json')
                 .expect(201)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                 });
-
 
             request(app)
                 .post('/users/login')
                 .send(data)
                 .set('Accept', 'application/json')
                 .expect(401)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                     done(); // informar o final do teste ao mocha
@@ -146,26 +127,20 @@ describe('REST POST TEST - User', function () {
                 password: user.password
             };
 
-            // request é o objeto, superteste,  responsavel pelos testes
             request(app)
                 .post('/users/adduser')
                 .send(user)
                 .set('Accept', 'application/json')
                 .expect(201)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                 });
-
 
             request(app)
                 .post('/users/login')
                 .send(data)
                 .set('Accept', 'application/json')
                 .expect(404)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                     done(); // informar o final do teste ao mocha
@@ -189,8 +164,6 @@ describe('REST GET TEST - User', function () {
                 .get('/users/')
                 .set('Accept', 'application/json')
                 .expect(200)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                     var userlist = JSON.parse(res.text).result;
@@ -202,7 +175,7 @@ describe('REST GET TEST - User', function () {
                     done(); // informar o final do teste ao mocha
                 });
         });
-    })
+    });
 
     it('Getting a user by username', function(done){
         this.timeout(5000);
@@ -212,8 +185,6 @@ describe('REST GET TEST - User', function () {
                 .send(user.username)
                 .set('Accept', 'application/json')
                 .expect(200)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
 
@@ -225,7 +196,7 @@ describe('REST GET TEST - User', function () {
                     done(); // informar o final do teste ao mocha
                 });
         });
-    })
+    });
 
     it('Getting a user by email', function(done){
         this.timeout(5000);
@@ -235,8 +206,6 @@ describe('REST GET TEST - User', function () {
                 .send(user.email)
                 .set('Accept', 'application/json')
                 .expect(200)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
 
@@ -253,7 +222,6 @@ describe('REST GET TEST - User', function () {
 
 describe('REST PUT TEST - User', function () {
     beforeEach(function () {
-        // runs before all tests in this block
         mongoose.connection.db.executeDbCommand({dropDatabase: 1}, function (err, result) {
             if (err) {
                 console.log(err);
@@ -261,22 +229,15 @@ describe('REST PUT TEST - User', function () {
         });
     });
     it('Updating a user', function (done) {
-        // Usando monky, mock, para mockar um user
         monky.build('User', function (err, user) {
-            // request é o objeto, superteste,  responsavel pelos testes
-
             request(app)
                 .post('/users/adduser')
                 .send(user)
                 .set('Accept', 'application/json')
                 .expect(201)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                 });
-
-
             user.name = "newName";
 
             var data = {
@@ -288,8 +249,6 @@ describe('REST PUT TEST - User', function () {
                 .send(data)
                 .set('Accept', 'application/json')
                 .expect(200)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                     done(); // informar o final do teste ao mocha
@@ -298,22 +257,15 @@ describe('REST PUT TEST - User', function () {
     });
 
     it('Updating a user with wrong old password', function (done) {
-        // Usando monky, mock, para mockar um user
         monky.build('User', function (err, user) {
-            // request é o objeto, superteste,  responsavel pelos testes
-
             request(app)
                 .post('/users/adduser')
                 .send(user)
                 .set('Accept', 'application/json')
                 .expect(201)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                 });
-
-
             user.name = "newName";
 
             var wrongOldPassowrd = "wrongOldPassowrd";
@@ -328,8 +280,6 @@ describe('REST PUT TEST - User', function () {
                 .send(data)
                 .set('Accept', 'application/json')
                 .expect(409)
-                // REST Testing ate aqui, end function recebe a response
-                // e pode se utilizar low level testing a partir dai
                 .end(function (err, res) {
                     should.not.exist(err); // Should.js
                     done(); // informar o final do teste ao mocha
@@ -349,15 +299,14 @@ describe('REST POST TEST - Rating in User', function () {
     });
 
     it('Adding a rating to an user', function (done) {
-        // Usando monky, mock, para mockar um user
         monky.build('Rating', function(err,rating) {
-            // request é o objeto, superteste,  responsavel pelos testes
             monky.create('User', function(err,teacher) {
                 monky.create('User', function(err,student) {
                     rating.commenter = student;
+                    var ratingJSON = JSON.stringify(rating);
                     var data = {
                         student: student,
-                        rating: rating
+                        rating: ratingJSON
                     };
 
                     request(app)
@@ -365,8 +314,6 @@ describe('REST POST TEST - Rating in User', function () {
                         .send(data)
                         .set('Accept', 'application/json')
                         .expect(201)
-                        // REST Testing ate aqui, end function recebe a response
-                        // e pode se utilizar low level testing a partir dai
                         .end(function (err, res) {
                             should.not.exist(err); // Should.js
                             done(); // informar o final do teste ao mocha
@@ -375,7 +322,39 @@ describe('REST POST TEST - Rating in User', function () {
             });
         });
     });
+
+    it('Getting the ratings of an user', function (done) {
+        monky.create('User', function(err,teacher) {
+            monky.createList('Rating', 3, { commenter: teacher._id}, function(err,ratings) {
+                teacher.profile.ratings = ratings;
+                teacher.update({profile: teacher.profile}, function (err) {
+                    should.not.exist(err); // Should.js
+                });
+                request(app)
+                    .get('/users/rating/'.concat(teacher.username))
+                    .set('Accept', 'application/json')
+                    .expect(200)
+                    .end(function (err, res) {
+                        should.not.exist(err); // Should.js
+
+                        var listReceived = JSON.parse(res.text).result;
+                        listReceived.length.should.be.equal(ratings.length);
+                        for (var i = 0; i < listReceived.length; i++) {
+                            compareObjects(listReceived[i], ratings[i]);
+                        }
+                        done(); // informar o final do teste ao mocha
+                    });
+            });
+        });
+    });
 });
+
+function compareObjects(trueObject, other){
+    // FIXME: Mother of Gambi, Lucas Andrade
+    for(campo in trueObject){
+        trueObject[campo].toString().should.be.eql(other[campo].toString());
+    }
+}
 
 
 function checkUser(user){
@@ -389,13 +368,13 @@ function checkUser(user){
     for(var j = 0; j < user.profile.ratings.length; j++){
         user.profile.ratings[i].should.be.an.instanceOf(mongoose.Schema.Types.ObjectId);
     }
-    for(var j = 0; j < user.profile.groupLecturesRegistered.length; j++){
+    for(j = 0; j < user.profile.groupLecturesRegistered.length; j++){
         user.profile.groupLecturesRegistered[i].should.be.an.instanceOf(mongoose.Schema.Types.ObjectId);
     }
-    for(var j = 0; j < user.profile.groupLecturesCreated.length; j++){
+    for(j = 0; j < user.profile.groupLecturesCreated.length; j++){
         user.profile.groupLecturesCreated[i].should.be.an.instanceOf(mongoose.Schema.Types.ObjectId);
     }
-    for(var j = 0; j < user.profile.subjects.length; j++){
+    for(j = 0; j < user.profile.subjects.length; j++){
         user.profile.subjects[i].should.be.an.instanceOf(mongoose.Schema.Types.ObjectId);
     }
     user.profile.mean.should.be.type('number');
