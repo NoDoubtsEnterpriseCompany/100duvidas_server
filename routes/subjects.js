@@ -15,9 +15,11 @@ router.get("/", function(req, res){
     if(!subjectName ){
         Subject.find(function(err, doc){
             if(err){
+                res.contentType('application/json');
                 res.status(500);
                 error.code = err.code;
                 error.message = err.message;
+
             }else{
                 result = doc;
                 res.contentType('application/json');
@@ -27,15 +29,18 @@ router.get("/", function(req, res){
     } else {
         Subject.findOne({name:subjectName}, function(err, doc){
             if(err) {
+                res.contentType('application/json');
                 res.status(500);
                 error.code = err.code;
                 error.message = err.message;
             }else{
                 if(doc) {
                     result = doc;
+                    res.contentType('application/json');
                 }
                 else{
-                    res.status(409);
+                    res.contentType('application/json');
+                    res.status(404);
                     error.code = ErrorCodes.Subject.NotFound;
                     error.message = "Subject not found";
                 }
@@ -71,11 +76,13 @@ router.post('/addsubject', function(req, res){
 
     subject.save(function(err) {
         if (err) {
+            res.contentType('application/json');
             error.code = err.code;
             error.message = err.message;
             //11000: MongoError's duplicated key
             error.code == 11000 ? res.status(409) : res.status(500);
         }else {
+            res.contentType('application/json');
             res.status(201); //HTTP created code
             result.uri = "/subjects/?name=" + subject.name;
         }

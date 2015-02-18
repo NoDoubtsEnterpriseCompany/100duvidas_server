@@ -9,14 +9,16 @@ var Rating = require('../models/ratingmodel');
 var monky = require('../test/mock').monky;
 var should = require('should');
 var mongoose = require('mongoose');
+var utils = require('./testUtils');
 
 // Importar nossa API rest
 var app = require("../app");
 
 //Mesmo teste com should js
 describe('REST POST TEST - User', function () {
-    beforeEach(function() {
-        mongoose.connection.db.executeDbCommand( {dropDatabase:1}, function(err, result) { if (err) { console.log(err); } });
+    beforeEach(function(done) {
+        this.timeout(10000);
+        utils.cleanBD(done,mongoose);
     });
     it('Posting a user', function (done) {
         monky.build('User', function (err, user) {
@@ -150,9 +152,9 @@ describe('REST POST TEST - User', function () {
 });
 
 describe('REST GET TEST - User', function () {
-    beforeEach(function() {
-        // runs before all tests in this block
-        mongoose.connection.db.executeDbCommand( {dropDatabase:1}, function(err, result) { if (err) { console.log(err); } });
+    beforeEach(function(done) {
+        this.timeout(10000);
+        utils.cleanBD(done,mongoose);
     });
 
     it('Getting All Users', function(done){
@@ -193,7 +195,7 @@ describe('REST GET TEST - User', function () {
                             should.not.exist(err); // Should.js
                             var listReceived = JSON.parse(res.text).result;
                             listReceived.length.should.be.equal(userList.length);
-                            compareLists(listReceived, userList, sort_by('username', false));
+                            utils.compareLists(listReceived, userList, utils.sort_by('username', false));
                             done(); // informar o final do teste ao mocha
                         });
                 });
@@ -302,12 +304,9 @@ describe('REST GET TEST - User', function () {
 });
 
 describe('REST PUT TEST - User', function () {
-    beforeEach(function () {
-        mongoose.connection.db.executeDbCommand({dropDatabase: 1}, function (err, result) {
-            if (err) {
-                console.log(err);
-            }
-        });
+    beforeEach(function(done) {
+        this.timeout(10000);
+        utils.cleanBD(done,mongoose);
     });
     it('Updating an user password', function (done) {
         monky.build('User', function (err, user) {
@@ -431,13 +430,9 @@ describe('REST PUT TEST - User', function () {
 });
 
 describe('REST POST TEST - Rating in User', function () {
-    beforeEach(function () {
-        // runs before all tests in this block
-        mongoose.connection.db.executeDbCommand({dropDatabase: 1}, function (err, result) {
-            if (err) {
-                console.log(err);
-            }
-        });
+    beforeEach(function(done) {
+        this.timeout(10000);
+        utils.cleanBD(done,mongoose);
     });
 
     it('Adding a rating to an user', function (done) {
@@ -492,13 +487,9 @@ describe('REST POST TEST - Rating in User', function () {
 });
 
 describe('REST GET TEST - Rating in User', function () {
-    beforeEach(function () {
-        // runs before all tests in this block
-        mongoose.connection.db.executeDbCommand({dropDatabase: 1}, function (err, result) {
-            if (err) {
-                console.log(err);
-            }
-        });
+    beforeEach(function(done) {
+        this.timeout(10000);
+        utils.cleanBD(done,mongoose);
     });
 
     it('Getting the ratings of an user', function (done) {
@@ -518,7 +509,7 @@ describe('REST GET TEST - Rating in User', function () {
                         var listReceived = JSON.parse(res.text).result;
                         listReceived.length.should.be.equal(ratings.length);
                         for (var i = 0; i < listReceived.length; i++) {
-                            compareObjects(listReceived[i], ratings[i]);
+                            utils.compareObjects(listReceived[i], ratings[i]);
                         }
                         done(); // informar o final do teste ao mocha
                     });
@@ -544,38 +535,4 @@ describe('REST GET TEST - Rating in User', function () {
             });
         });
     });
-
-
 });
-
-function compareObjects(trueObject, other){
-    // FIXME: Mother of Gambi, Lucas Andrade
-    for(var campo in trueObject){
-        if(trueObject[campo] !== null && typeof trueObject[campo]  === 'object'){
-            compareObjects(trueObject[campo], other[campo]);
-        } else {
-            trueObject[campo].toString().should.be.eql(other[campo].toString());
-        }
-    }
-}
-
-function compareLists(trueList, otherList, sortFunction){
-    trueList.sort(sortFunction);
-    otherList.sort(sortFunction);
-    trueList.length.should.be.equal(otherList.length);
-    for(var i = 0; i < trueList.length; i++){
-        compareObjects(trueList[i],otherList[i]);
-    }
-}
-
-var sort_by = function(field, reverse, primer){
-    var key = primer ?
-        function(x) {return primer(x[field])} :
-        function(x) {return x[field]};
-
-    reverse = [-1, 1][+!!reverse];
-
-    return function (a, b) {
-        return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
-    }
-}
