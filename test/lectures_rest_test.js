@@ -69,6 +69,8 @@ describe('REST GET TEST - Lectures', function(){
                     should.not.exist(err); // Should.js
                     var listReceived = JSON.parse(res.text).result;
                     listReceived.length.should.be.equal(lectureList.length);
+                    listReceived.sort(utils.sort_by('_id', false));
+                    lectureList.sort(utils.sort_by('_id', false));
                     for(var i = 0; i < listReceived.length; i++){
                         listReceived[i]._id.toString().should.be.equal(lectureList[i]._id.toString());
                     }

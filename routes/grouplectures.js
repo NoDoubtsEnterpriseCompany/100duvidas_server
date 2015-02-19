@@ -22,6 +22,7 @@ router.get('/', function(req, res) {
    }
    Group.find(filters, function(err, doc){
             if(err){
+                res.contentType('application/json');
                 res.status(500);
                 error.code = err.code;
                 error.message = err.message;
@@ -39,14 +40,15 @@ router.put(/\/grouplecture\/(\w+)\/addUser$/, function(req, res) {
   var user = new User(putData);
   var result = {};
   var error = {};
+  res.contentType('application/json');
   User.findOne({username:user.username}, function(err, user) {
+      console.log(err);
     if (err) {
 		res.status(404);
         error.code = err.code;
         error.message = err.message;
 		res.send(JSON.stringify({"result":result, "error":error}));
 	} else {
-		console.log(user);
 		user.profile.groupLecturesRegistered.push(groupId);
 		User.update({username:user.username}, user, {}, function(err2, data) {
 			if(err2) {
@@ -55,7 +57,6 @@ router.put(/\/grouplecture\/(\w+)\/addUser$/, function(req, res) {
 				error.message = err2.message;
 				res.send(JSON.stringify({"result":result, "error":error}));
 			} else {
-				console.log("update user");
 				Group.findOne({_id:groupId}).exec(function(err3, group){
 					if (err3) {
 						res.status(404);
@@ -63,7 +64,6 @@ router.put(/\/grouplecture\/(\w+)\/addUser$/, function(req, res) {
 						error.message = err3.message;
 						res.send(JSON.stringify({"result":result, "error":error}));
 					} else {
-						console.log("find group")
 						group.studentsRegistered.push(user._id);
 						Group.update({_id: group._id}, group, {}, function(err4, up) {
 							if (err4) {
@@ -71,7 +71,6 @@ router.put(/\/grouplecture\/(\w+)\/addUser$/, function(req, res) {
 								error.code = err4.code;
 								error.message = err4.message;
 							} else {
-								console.log("update user");
 								result = up;
 							}
 							res.send(JSON.stringify({"result":result, "error":error}));
