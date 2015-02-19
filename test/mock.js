@@ -1,11 +1,12 @@
 var mongoose  = require('mongoose')
-    , Monky         = require('monky')
-    , monky         = new Monky(mongoose)
-    , User          = require('../models/usermodel')
-    , Subject       = require('../models/subjectmodel')
-    , Lecture       = require('../models/lecturemodel')
-    , Rating        = require('../models/ratingmodel')
-    , GroupLecture  = require('../models/grouplecturemodel');
+    , Monky            = require('monky')
+    , monky            = new Monky(mongoose)
+    , User             = require('../models/usermodel')
+    , Subject          = require('../models/subjectmodel')
+    , Lecture          = require('../models/lecturemodel')
+    , Rating           = require('../models/ratingmodel')
+    , ScheduledLecture = require('../models/scheduledlecturemodel')
+    , GroupLecture     = require('../models/grouplecturemodel');
 
 /*
     Gerador de Users, #n <-- eh o index de qts Users foram criados User1, passoword1 sao exemplos
@@ -44,8 +45,17 @@ monky.factory('Lecture', {
     date: new Date(),
     subject: monky.ref('Subject', 'id'),
     teacher: monky.ref('User', 'id'),
-    student: [monky.ref('User', 'id'), monky.ref('User', 'id')],
-    price: 50.0
+    price: 50.0,
+    address: 'address#n'
+});
+
+monky.factory('ScheduledLecture', {
+    date: new Date(),
+    subject: monky.ref('Subject', 'id'),
+    teacher: monky.ref('User', 'id'),
+    student: monky.ref('User','id'),
+    price: 50.0,
+    address: 'address#n'
 });
 
 monky.factory('Rating', {

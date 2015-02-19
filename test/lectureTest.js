@@ -24,8 +24,8 @@ describe('Lecture', function() {
             lecture.should.have.property('date')
             lecture.should.have.property('subject');
             lecture.should.have.property('teacher');
-            lecture.should.have.property('student');
             lecture.should.have.property('price');
+            lecture.should.have.property('address');
         });
     });
 });
