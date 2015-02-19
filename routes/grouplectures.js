@@ -8,6 +8,7 @@ router.get('/', function(req, res) {
    var filters = {};
    var groupProfessorUserName = req.query.professor;
    var groupSubjectId = req.query.subject;
+   var studentId = req.query.student;
    var error =  {};
    var result = {};
    if (groupProfessorUserName !== undefined) {
