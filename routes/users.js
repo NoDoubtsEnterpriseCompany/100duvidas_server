@@ -305,14 +305,11 @@ router.post(/\/addrating\/(\w+)$/, function(req, res){
         if(err){
             error.code = err.code;
             error.message = err.message;
-            console.log("Erro salvar rating:" + err);
             res.status(500);
         }else{
-            //result.uri= "";
             res.status(201);
-            console.log("salvou");
         }
-        res.send(JSON.stringify({"result":result, "error":error}));
+        //res.send(JSON.stringify({"result":result, "error":error}));
 
     });
     var error = {};
@@ -322,12 +319,10 @@ router.post(/\/addrating\/(\w+)$/, function(req, res){
             res.status(500);
             error.code = err.code;
             error.message = err.message;
-            res.send(JSON.stringify({"result":result, "error":error}));
         }else if(doc){
             doc.profile.ratings.push(rating._id);
             doc.profile.totalScore+=rating.score;
             doc.profile.mean = doc.profile.totalScore / doc.profile.ratings.length;
-
             doc.update({profile: doc.profile   },function(err){
                 if(err)
                     res.status(500);
@@ -340,8 +335,8 @@ router.post(/\/addrating\/(\w+)$/, function(req, res){
             res.status(404);
             error.code = ErrorCodes.User.NotFound;
             error.message = "User not found";
-            res.send(JSON.stringify({"result":result, "error":error}));
         }
+        res .send(JSON.stringify({"result":result, "error":error}));
     });
 });
 
