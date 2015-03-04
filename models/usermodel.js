@@ -18,6 +18,7 @@ var UserSchema = new mongoose.Schema(
             gender: Number,
             degree: String,
             speciality: String,
+            city:String,
             subjects: [{type:mongoose.Schema.Types.ObjectId, ref:"Subject", unique:true}],
 			groupLecturesRegistered: [{type:mongoose.Schema.Types.ObjectId, ref:"GroupLecture"}],
 			groupLecturesCreated: [{type:mongoose.Schema.Types.ObjectId, ref:"GroupLecture"}],
