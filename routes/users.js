@@ -4,6 +4,7 @@ var User = require('../models/usermodel');
 var Subject = require("../models/subjectmodel");
 var Lecture = require("../models/lecturemodel");
 var Rating = require("../models/ratingmodel");
+var Recommendation = require("../models/recommendationmodel")
 var ErrorCodes = require('../exceptions/errorcodes');
 var router = express.Router();
 
@@ -364,7 +365,77 @@ router.get(/\/rating\/(\w+)$/, function(req, res){
         }
         res.send(JSON.stringify({"result":result, "error":error}));
     });
+});
 
+
+
+
+/**
+ * return a list of recommendations given an username
+ */
+router.get(/\/recommendation\/(\w+)$/, function(req, res){
+    var error =  {};
+    var result = {};
+    var userUserName = req.params[0];
+    User.findOne({username:userUserName}).populate("profile.recommendations").exec(function(err, doc) {
+        if(err) {
+            res.status(500);
+            error.code = err.code;
+            error.message = err.message;
+        }else{
+            if(doc) {
+                result = doc.profile.recommendations;
+            }
+            else{
+                res.status(404);
+                error.code = ErrorCodes.User.NotFound;
+                error.message = "User not found";
+            }
+        }
+        res.send(JSON.stringify({"result":result, "error":error}));
+    });
+});
+
+
+router.post(/\/addrecommendation\/(\w+)$/, function(req, res){
+    //console.log(req);
+    var studentusername = req.params[0];
+    var recommendation = new Recommendation(JSON.parse(req.body));
+    recommendation.save(function(err){
+        if(err){
+            error.code = err.code;
+            error.message = err.message;
+            res.status(500);
+        }else{
+            res.status(201);
+        }
+        //res.send(JSON.stringify({"result":result, "error":error}));
+
+    });
+    var error = {};
+    var result = {};
+    User.findOne({"username":studentusername},function(err,doc){
+        if(err){
+            res.status(500);
+            error.code = err.code;
+            error.message = err.message;
+        }else if(doc){
+            doc.profile.recommendations.push(recommendation._id);
+            doc.update({profile: doc.profile   },function(err){
+                if(err)
+                    res.status(500);
+                else{
+                    res.status(201);
+                    result.uri="users/user/"+ studentusername;
+                }
+            });
+        }else{
+            res.status(404);
+            error.code = ErrorCodes.User.NotFound;
+            error.message = "User not found";
+        }
+        res .send(JSON.stringify({"result":result, "error":error}));
+    });
 });
 
 module.exports = router;

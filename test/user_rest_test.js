@@ -536,3 +536,85 @@ describe('REST GET TEST - Rating in User', function () {
         });
     });
 });
+
+
+describe('REST GET TEST - Recommendation in User', function () {
+    beforeEach(function(done) {
+        this.timeout(10000);
+        utils.cleanBD(done,mongoose);
+    });
+
+    it('Getting the recommendations of an user', function (done) {
+        monky.create('User', function(err,student) {
+            monky.createList('Recommendation', 3, function(err,recommendations) {
+                student.profile.recommendations = [];
+                for(var i = 0; i < recommendations.length; i++){
+                    student.profile.recommendations.push(recommendations[i]._id);
+                }
+                student.update({profile: student.profile}, function (err) {
+                    should.not.exist(err); // Should.js
+                });
+                request(app)
+                    .get('/users/recommendation/'.concat(student.username))
+                    .set('Accept', 'application/json')
+                    .expect(200)
+                    .end(function (err, res) {
+                        should.not.exist(err); // Should.js
+
+                        var listReceived = JSON.parse(res.text).result;
+                        listReceived.length.should.be.equal(recommendations.length);
+                        for (var i = 0; i < listReceived.length; i++) {
+                            utils.compareObjects(listReceived[i], recommendations[i]);
+                        }
+                        done(); // informar o final do teste ao mocha
+                    });
+            });
+        });
+    });
+
+    it('Getting the recommendations of an invalid user', function (done) {
+        monky.create('User', function(err,student) {
+            monky.createList('Recommendation', 3, function(err,recommendations) {
+                student.profile.recommendations = recommendations;
+                student.update({profile: student.profile}, function (err) {
+                    should.not.exist(err); // Should.js
+                });
+                request(app)
+                    .get('/users/recommendation/'.concat('not_a_valid_username'))
+                    .set('Accept', 'application/json')
+                    .expect(404)
+                    .end(function (err, res) {
+                        should.not.exist(err); // Should.js
+                        done(); // informar o final do teste ao mocha
+                    });
+            });
+        });
+    });
+});
+
+//describe('REST POST TEST - Recommendation in User', function () {
+//    beforeEach(function(done) {
+//        this.timeout(10000);
+//        utils.cleanBD(done,mongoose);
+//    });
+//    it('Posting a recommendations of an user', function (done) {
+//        monky.create('User', function(err,student) {
+//            monky.build('Recommendation', function(err,recommendation) {
+//                console.log(recommendation);
+//                var data = { recommendation: recommendation}
+//                var recommendationJSON = JSON.stringify(data);
+//                console.log(recommendationJSON);
+//                console.log('saiu do teste');
+//                request(app)
+//                    .post('/users/addrecommendation/'.concat(student.username))
+//                    .send(data.toString())
+//                    .set('Accept', 'application/json')
+//                    .expect(201)
+//                    .end(function (err, res) {
+//                        should.not.exist(err); // Should.js
+//                        done(); // informar o final do teste ao mocha
+//                    });
+//            });
+//        });
+//    });
+//});

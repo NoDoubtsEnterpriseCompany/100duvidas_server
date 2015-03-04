@@ -5,6 +5,7 @@ var mongoose  = require('mongoose')
     , Subject          = require('../models/subjectmodel')
     , Lecture          = require('../models/lecturemodel')
     , Rating           = require('../models/ratingmodel')
+    , Recommendation   = require('../models/recommendationmodel')
     , ScheduledLecture = require('../models/scheduledlecturemodel')
     , GroupLecture     = require('../models/grouplecturemodel');
 
@@ -26,6 +27,7 @@ monky.factory('User',  {
             subjects: [monky.ref('Subject', 'id'),
                 monky.ref('Subject', 'id'),
                 monky.ref('Subject', 'id')],
+            recommendations: [],
             groupLecturesRegistered: [monky.ref('GroupLecture', 'id')],
             groupLecturesCreated: [monky.ref('GroupLecture', 'id')],
             totalScore: 0,
@@ -62,6 +64,11 @@ monky.factory('Rating', {
     comment: 'comment#n',
     commenter: monky.ref('User', 'id'),
     score: 3
+});
+
+monky.factory('Recommendation', {
+    description: 'comment#n',
+    teacher: monky.ref('User', 'id')
 });
 
 monky.factory('GroupLecture', {
