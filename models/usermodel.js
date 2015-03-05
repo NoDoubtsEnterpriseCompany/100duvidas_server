@@ -23,6 +23,7 @@ var UserSchema = new mongoose.Schema(
 			groupLecturesCreated: [{type:mongoose.Schema.Types.ObjectId, ref:"GroupLecture"}],
             totalScore: {type: Number, default:0},
             ratings:[{type:mongoose.Schema.Types.ObjectId, ref:"Rating"}],
+            recommendations: [{type:mongoose.Schema.Types.ObjectId, ref:"Recommendation"}],
             mean:{type: Number, default:0}
         }
     }
