@@ -400,7 +400,7 @@ router.get(/\/recommendation\/(\w+)$/, function(req, res){
 router.post(/\/addrecommendation\/(\w+)$/, function(req, res){
     //console.log(req);
     var studentusername = req.params[0];
-    var recommendation = new Recommendation(JSON.parse(req.body));
+    var recommendation = new Recommendation(req.body);
     recommendation.save(function(err){
         if(err){
             error.code = err.code;
