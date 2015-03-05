@@ -220,7 +220,7 @@ router.put(/\/updateuser\/(\w+)$/, function(req, res){
   //Searches user to update data
   User.findOne({username:username}, function(err, doc) {
     if(doc) {
-      var newData = putData.user;
+      var newData = putData;
 
       //Check for password's change to match old password
       if(newData.password) {
