@@ -29,8 +29,8 @@ router.post('/adduser', function(req, res){
 });
 
 //Retrieves a user given a username through GET request
-router.get(/\/user\/(\w+)$/, function(req, res){
-  var username = req.params[0];
+router.get(/\/user/, function(req, res){
+  var username = req.query.username;
   var error = {};
   var result = {};
 
@@ -42,31 +42,6 @@ router.get(/\/user\/(\w+)$/, function(req, res){
     }else{
         if(doc)
           result = doc;
-        else{
-          res.status(404);
-          error.code = ErrorCodes.User.NotFound;
-          error.message = "User not found";
-        }
-    }
-    res.send(JSON.stringify({"result":result, "error":error}));
-  });
-});
-
-//Retrieves a user given a email through GET request
-router.get(/\/user/, function(req, res){
-  var email = req.query.email;
-  var error = {};
-  var result = {};
-
-  User.findOne({email:email}, function(err, doc){
-    if(err) {
-      res.status(500);
-      error.code = err.code;
-      error.message = err.message;
-    }else{
-        if(doc) {
-            result = doc;
-        }
         else{
           res.status(404);
           error.code = ErrorCodes.User.NotFound;

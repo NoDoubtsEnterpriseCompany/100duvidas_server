@@ -242,7 +242,8 @@ describe('REST GET TEST - User', function () {
         monky.create('User', function(err, userOut){
             monky.create('User', function(err, user){
                 request(app)
-                    .get('/users/user/'.concat(user.username))
+                    .get('/users/user')
+                    .query({username:user.username})
                     .set('Accept', 'application/json')
                     .expect(200)
                     .end(function (err, res) {
@@ -260,39 +261,8 @@ describe('REST GET TEST - User', function () {
         this.timeout(5000);
         monky.create('User', function(err, user){
             request(app)
-                .get('/users/user/'.concat('not_a_valid_username'))
-                .set('Accept', 'application/json')
-                .expect(404)
-                .end(function (err, res) {
-                    should.not.exist(err); // Should.js
-                    done(); // informar o final do teste ao mocha
-                });
-        });
-    });
-
-    it('Getting a user by email', function(done){
-        this.timeout(5000);
-        monky.create('User', function(err, user){
-            request(app)
                 .get('/users/user')
-                .query({email: user.email})
-                .set('Accept', 'application/json')
-                .expect(200)
-                .end(function (err, res) {
-                    should.not.exist(err); // Should.js
-                    var userReceived = JSON.parse(res.text).result;
-                    userReceived.email.should.be.equal(user.email);
-                    done(); // informar o final do teste ao mocha
-                });
-        });
-    });
-
-    it('Getting a user by an invalid email', function(done){
-        this.timeout(5000);
-        monky.create('User', function(err, user){
-            request(app)
-                .get('/users/user')
-                .query({email: 'not_a_valid_email'})
+                .query({username:'not_a_valid_username'})
                 .set('Accept', 'application/json')
                 .expect(404)
                 .end(function (err, res) {
