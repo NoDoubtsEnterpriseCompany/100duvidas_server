@@ -68,6 +68,7 @@ monky.factory('Rating', {
 
 monky.factory('Recommendation', {
     description: 'comment#n',
+    teacherUsername: 'username#n',
     teacher: monky.ref('User', 'id')
 });
 

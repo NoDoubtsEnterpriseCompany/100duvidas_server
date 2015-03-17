@@ -7,6 +7,7 @@ var User = require('./usermodel');
 var RecommendationSchema = new mongoose.Schema(
     {
         description: {type: String},
+        teacherUsername: {type: String},
         teacher:{type:mongoose.Schema.Types.ObjectId, ref:"User"}
     }
 );
