@@ -21,7 +21,9 @@
     "supertest": "*",
     "grunt-cli": "*",
     "grunt": "*",
-    "grunt-mocha-istanbul": "*"
+    "grunt-mocha-istanbul": "*",
+    "passport": "*",
+    "utf8": "*"
   },
   "devDependencies": {
     "should": "^4.3.0"
