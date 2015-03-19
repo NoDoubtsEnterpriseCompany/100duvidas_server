@@ -7,7 +7,6 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var express = require("express");
 var ErrorCodes = require('../exceptions/errorcodes');
 var router = express.Router();
-var utf8 = require('utf8');
 
 router.get("/", function(req, res){
         var error =  {};
@@ -71,7 +70,7 @@ router.get(/\/subject\/(\w+)$/, function(req, res){
 
 router.post('/addsubject', function(req, res){
     console.log("body: "+req.body);
-    var subject = new Subject(utf8.encode(req.body));
+    var subject = new Subject(req.body);
     var error= {};
     var result = {};
 

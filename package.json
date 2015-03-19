@@ -22,8 +22,7 @@
     "grunt-cli": "*",
     "grunt": "*",
     "grunt-mocha-istanbul": "*",
-    "passport": "*",
-    "utf8": "*"
+    "passport": "*"
   },
   "devDependencies": {
     "should": "^4.3.0"
